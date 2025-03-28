@@ -1,0 +1,21 @@
+ATM Cash Withdrawal
+If you request cash from an ATM, it processes the transaction once and does not dispense money multiple times for a single request.
+
+Code Example (C - ATM Withdrawal Process)ATM Cash Withdrawal
+If you request cash from an ATM, it processes the transaction once and does not dispense money multiple times for a single request.
+
+Code Example (C - ATM Withdrawal Process)
+#include <stdio.h>
+
+int main() {
+    int withdrawal_done = 0;
+    int amount = 1000;
+
+    if (!withdrawal_done) {  // Ensures one-time withdrawal
+        printf("Dispensing cash: $%d\n", amount);
+        withdrawal_done = 1;
+    } else {
+        printf("Transaction already completed.\n");
+    }
+    return 0;
+}
