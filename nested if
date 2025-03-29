@@ -1,0 +1,33 @@
+Scenario: ATM PIN Verification (Using Nested if)
+Explanation:
+The user must enter a correct 4-digit PIN to access their account.
+
+If the PIN is correct, they can withdraw money (if they have enough balance).
+
+If the PIN is incorrect, access is denied.
+
+#include <stdio.h>
+
+int main() {
+    int pin, amount, balance = 5000; // Initial balance is 5000
+
+    // Asking user to enter PIN
+    printf("Enter your 4-digit ATM PIN: ");
+    scanf("%d", &pin);
+
+    if (pin == 1234) {  // Checking correct PIN
+        printf("PIN Correct! Enter amount to withdraw: ");
+        scanf("%d", &amount);
+
+        if (amount > 0 && amount <= balance) {  // Checking sufficient balance
+            balance -= amount; // Deduct amount from balance
+            printf("Withdrawal successful! Remaining balance: %d\n", balance);
+        } else {
+            printf("Insufficient balance or invalid amount!\n");
+        }
+    } else {
+        printf("Incorrect PIN! Access Denied.\n");
+    }
+
+    return 0;
+}
