@@ -8,14 +8,19 @@ Code Example (C - ATM Withdrawal Process)
 #include <stdio.h>
 
 int main() {
-    int withdrawal_done = 0;
-    int amount = 1000;
+    int withdrawal_done = 0; // Flag to track withdrawal
+    int amount;
 
-    if (!withdrawal_done) {  // Ensures one-time withdrawal
+    printf("Enter withdrawal amount: ");
+    scanf("%d", &amount);
+
+    if (withdrawal_done == 0) {
         printf("Dispensing cash: $%d\n", amount);
-        withdrawal_done = 1;
+        withdrawal_done = 1; // Mark transaction as done
     } else {
         printf("Transaction already completed.\n");
     }
+
     return 0;
 }
+
