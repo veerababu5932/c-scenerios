@@ -1,0 +1,50 @@
+#include <stdio.h>
+
+int main() {
+    int choice;
+    double balance = 5000, amount;
+
+    while (1) {  // Infinite loop for continuous transactions
+        // Display ATM Menu
+        printf("\nATM Menu:\n");
+        printf("1. Check Balance\n");
+        printf("2. Withdraw Money\n");
+        printf("3. Deposit Money\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: // Check Balance
+                printf("Your current balance is: $%.2lf\n", balance);
+                break;
+            case 2: // Withdraw Money
+                printf("Enter amount to withdraw: ");
+                scanf("%lf", &amount);
+                if (amount > 0 && amount <= balance) {
+                    balance -= amount;
+                    printf("Withdrawal successful! Remaining balance: $%.2lf\n", balance);
+                } else {
+                    printf("Error: Insufficient balance or invalid amount.\n");
+                }
+                break;
+            case 3: // Deposit Money
+                printf("Enter amount to deposit: ");
+                scanf("%lf", &amount);
+                if (amount > 0) {
+                    balance += amount;
+                    printf("Deposit successful! Updated balance: $%.2lf\n", balance);
+                } else {
+                    printf("Error: Invalid deposit amount.\n");
+                }
+                break;
+            case 4: // Exit
+                printf("Thank you for using the ATM. Goodbye!\n");
+                return 0; // Exit program
+            default:
+                printf("Invalid choice! Please select a valid option.\n");
+        }
+    }
+
+    return 0;
+}
