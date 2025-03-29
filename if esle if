@@ -1,1 +1,44 @@
+Scenario: Student Grading System using if-else if in C
+Scenario Explanation:
+A student gets grades based on their marks:
 
+90 - 100 → Grade A
+
+80 - 89 → Grade B
+
+70 - 79 → Grade C
+
+60 - 69 → Grade D
+
+Below 60 → Grade F (Fail)
+Scenario: Traffic Light System using if-else if in C
+Scenario Explanation:
+A traffic light has three signals:
+
+Red Light → STOP
+
+Yellow Light → READY to go
+
+Green Light → GO
+#include <stdio.h>
+
+int main() {
+    char light;
+
+    // Taking input from the user
+    printf("Enter traffic light color (R for Red, Y for Yellow, G for Green): ");
+    scanf(" %c", &light);
+
+    // Traffic signal logic using if-else if
+    if (light == 'R' || light == 'r') {
+        printf("Signal: RED - STOP!\n");
+    } else if (light == 'Y' || light == 'y') {
+        printf("Signal: YELLOW - Get READY to go!\n");
+    } else if (light == 'G' || light == 'g') {
+        printf("Signal: GREEN - GO!\n");
+    } else {
+        printf("Invalid input! Please enter R, Y, or G.\n");
+    }
+
+    return 0;
+}
