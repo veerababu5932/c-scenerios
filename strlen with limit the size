@@ -1,0 +1,14 @@
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	char str[5];
+	printf("enter the string");
+scanf("%2s", str); // Limits input to 4 characters (to fit in str[5])
+
+	int length=strlen(str);
+	printf("the string is %s",str);
+	printf("Length of string is %d", length);
+	
+	
+}
