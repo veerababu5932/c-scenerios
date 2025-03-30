@@ -1,0 +1,16 @@
+#include<stdio.h>
+int main()
+{
+	char array_name[3]={'h', 'a', 'i'};
+	char str1[4]={'h', 'a','i','\0'};
+
+	char str4[]={"h""a""i""\0"};
+	char str5[]="hai";
+	char str6[4]="hai";
+	printf("%s\n", array_name);
+	printf("%lu\n", sizeof(array_name));
+	printf("%s\n", str5);
+	printf("%lu\n",sizeof(str5));
+	printf("%s\n",str4);
+	printf("%lu",sizeof0str4);
+}
