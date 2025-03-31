@@ -1,0 +1,30 @@
+#include <stdio.h>
+
+int main() {
+    char source[] = "hello";  // The string to copy from
+    char dest[10];           // The string to copy to (must be big enough)
+    int i = 0;               // Index to track position
+
+    // Copy each character until we reach '\0'
+    while (source[i] != '\0') {
+        dest[i] = source[i]; // Copy the current character
+        i++;                 // Move to the next position
+    }
+    dest[i] = '\0';          // Add the null terminator at the end
+
+    printf("Copied string: %s\n", dest);
+    return 0;
+}
+Step-by-Step Example
+Copying "cat":
+
+source = ['c', 'a', 't', '\0'], dest = [empty], i = 0.
+source[0] is 'c', not \0:
+dest[0] = 'c', i = 1.
+source[1] is 'a', not \0:
+dest[1] = 'a', i = 2.
+source[2] is 't', not \0:
+dest[2] = 't', i = 3.
+source[3] is \0, so the loop stops.
+dest[3] = '\0'.
+Now dest = ['c', 'a', 't', '\0'].
