@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+int main() {
+    char bracelet1[10];    // Your bracelet
+    char bracelet2[10];    // Friend’s bracelet
+    int i = 0;
+    int match = 1;
+
+    printf("Enter your bracelet word: ");
+    scanf("%s", bracelet1);
+    printf("Enter your friend’s bracelet word: ");
+    scanf("%s", bracelet2);
+
+    // Compare the letters
+    while (bracelet1[i] != '\0' && bracelet2[i] != '\0') {
+        if (bracelet1[i] != bracelet2[i]) {
+            match = 0;
+            break;
+        }
+        i++;
+    }
+
+    // Check if lengths match
+    if (bracelet1[i] != '\0' || bracelet2[i] != '\0') {
+        match = 0;
+    }
+
+    // Show the result
+    if (match == 1) {
+        printf("The bracelets match!\n");
+    } else {
+        printf("The bracelets don’t match.\n");
+    }
+
+    return 0;
+}
