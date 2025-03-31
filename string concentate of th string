@@ -1,0 +1,30 @@
+#include <stdio.h>
+
+int main() {
+    char note1[10];    // First sticky note
+    char note2[10];    // Second sticky note
+    char paper[20];    // New paper (big enough for both)
+    int i = 0;
+
+    printf("Enter first item: ");
+    scanf("%s", note1);
+    printf("Enter second item: ");
+    scanf("%s", note2);
+
+    // Copy first note
+    while (note1[i] != '\0') {
+        paper[i] = note1[i];
+        i++;
+    }
+
+    // Add second note
+    int j = 0;
+    while (note2[j] != '\0') {
+        paper[i] = note2[j];
+        i++;
+        j++;
+    }
+    paper[i] = '\0'; // Add the dot
+
+    printf("Full list: %s\n", paper);
+}
