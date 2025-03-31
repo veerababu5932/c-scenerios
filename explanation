@@ -1,0 +1,32 @@
+Step-by-Step Example
+Imagine the user types "cat". The string str1 is stored as ['c', 'a', 't', '\0']. Let’s walk through the loop:
+
+Start: length = 0
+Check: str1[0] is 'c'. Is 'c' not \0? Yes, so keep going.
+Do: length++ → length = 1.
+Next Round: length = 1
+Check: str1[1] is 'a'. Is 'a' not \0? Yes, so keep going.
+Do: length++ → length = 2.
+Next Round: length = 2
+Check: str1[2] is 't'. Is 't' not \0? Yes, so keep going.
+Do: length++ → length = 3.
+Next Round: length = 3
+Check: str1[3] is \0. Is \0 not \0? No, it’s equal to \0.
+Stop: The loop ends because the condition is false.
+Result: length is now 3, which is the number of characters in "cat".
+Real-Life Analogy
+Imagine you’re counting how many people are in a line, but you don’t know the total yet. You start at the first person and say:
+
+"Are you the last person?" (No, there’s someone behind them.)
+Move to the next person and ask again.
+Keep going until you reach someone who says, "Yes, I’m the last one!" Then you stop and count how many people you passed.
+In the program:
+
+Each character is a "person."
+\0 is the "last one" that tells you the line (string) is over.
+length is your tally of how many you’ve counted.
+Key Points for Students
+Repeating: The while loop repeats as long as the condition is true (str1[length] != '\0').
+Counting: Each time it loops, it adds 1 to length, building the total count.
+Stopping: It stops when it hits \0, the end of the string.
+Order Matters: We check the condition before running the body. If str1[0] were \0 (an empty string), the loop wouldn’t run at all!
