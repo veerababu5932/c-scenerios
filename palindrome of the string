@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char str[100];
+    int i, len, flag = 1; // Assume it's a palindrome
+
+    printf("Enter a string: ");
+    scanf("%s", str);
+
+    len = strlen(str); // Find the length of the string
+
+    // Check characters from start and end
+    for (i = 0; i < len / 2; i++) {
+        if (str[i] != str[len - i - 1]) {
+            flag = 0; // Not a palindrome
+            break;
+        }
+    
+    }
+    printf("%d",len);
+
+    // Print result
+    if (flag)
+        printf("Palindrome\n");
+    else
+        printf("Not a palindrome\n");
+
+    return 0;
+}
