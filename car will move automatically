@@ -1,0 +1,102 @@
+#include <graphics.h>
+#include <conio.h>
+#include <dos.h>
+
+union REGS i, o;
+
+void init_mouse() {
+    i.x.ax = 0; // Reset mouse
+    int86(0x33, &i, &o);
+    if (o.x.ax == 0) {
+        printf("Mouse not installed!");
+        exit(1);
+    }
+    i.x.ax = 1; // Show mouse pointer
+    int86(0x33, &i, &o);
+}
+
+void get_mouse_pos(int *x, int *y, int *button) {
+    i.x.ax = 3; // Get mouse position and button status
+    int86(0x33, &i, &o);
+    *x = o.x.cx; // X-coordinate
+    *y = o.x.dx; // Y-coordinate
+    *button = o.x.bx; // Button status (left = 1, right = 2)
+}
+
+void draw_car(int x, int y) {
+    setcolor(YELLOW); // Car body color
+    rectangle(x, y, x + 100, y + 40); // Car body (100x40 rectangle)
+    setfillstyle(SOLID_FILL, YELLOW);
+    floodfill(x + 50, y + 20, YELLOW); // Fill body
+    
+    setcolor(BLUE); // Cabin color
+    rectangle(x + 30, y - 20, x + 70, y); // Cabin (40x20 rectangle)
+    setfillstyle(SOLID_FILL, BLUE);
+    floodfill(x + 50, y - 10, BLUE); // Fill cabin
+    
+    setcolor(RED); // Wheel color
+    circle(x + 25, y + 40, 10); // Left wheel
+    circle(x + 75, y + 40, 10); // Right wheel
+    setfillstyle(SOLID_FILL, RED);
+    floodfill(x + 25, y + 40, RED); // Fill left wheel
+    floodfill(x + 75, y + 40, RED); // Fill right wheel
+    
+    setcolor(GREEN); // Flag color
+    rectangle(x + 70, y - 40, x + 80, y - 20); // Flag (10x20 rectangle on cabin)
+    setfillstyle(SOLID_FILL, GREEN);
+    floodfill(x + 75, y - 30, GREEN); // Fill flag
+}
+
+void main() {
+    int gd = DETECT, gm;
+    int car_x = 0, car_y = 400; // Starting position (bottom of screen)
+    int max_x, x, y, button;
+    int is_moving = 1; // Car moves by default
+    
+    initgraph(&gd, &gm, "C:\\TURBOC3\\BGI"); // Initialize graphics mode
+    if (graphresult() != grOk) {
+        printf("Graphics initialization failed!");
+        exit(1);
+    }
+    
+    init_mouse(); // Initialize mouse
+    max_x = getmaxx(); // Get maximum x-coordinate of screen
+    
+    setbkcolor(BLACK); // Background color
+    cleardevice();
+    setcolor(WHITE);
+    outtextxy(10, 10, "Right-click to stop, Left-click to move, Press any key to exit");
+    
+    while (!kbhit()) { // Continue until a key is pressed
+        get_mouse_pos(&x, &y, &button); // Get mouse status
+        
+        if (button & 2) { // Right mouse button pressed
+            is_moving = 0; // Stop car
+            while (button & 2) { // Wait for button release
+                get_mouse_pos(&x, &y, &button);
+            }
+        }
+        if (button & 1) { // Left mouse button pressed
+            is_moving = 1; // Resume car movement
+            while (button & 1) { // Wait for button release
+                get_mouse_pos(&x, &y, &button);
+            }
+        }
+        
+        cleardevice(); // Clear screen for animation
+        outtextxy(10, 10, "Right-click to stop, Left-click to move, Press any key to exit");
+        
+        draw_car(car_x, car_y); // Draw car at current position
+        
+        if (is_moving) { // Update position only if moving
+            car_x += 5; // Move car right by 5 pixels
+            if (car_x > max_x) { // If car reaches right edge
+                car_x = -100; // Reset to left (off-screen for smooth entry)
+            }
+        }
+        
+        delay(50); // Control animation speed (50 ms per frame)
+    }
+    
+    closegraph(); // Close graphics mode
+}
