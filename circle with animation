@@ -1,0 +1,83 @@
+#include <graphics.h>
+#include <dos.h>
+#include <math.h>
+#include <conio.h>
+#include <stdio.h>
+
+// Mouse handling functions
+void init_mouse() {
+    union REGS in, out;
+    in.x.ax = 0; // Reset mouse
+    int86(0x33, &in, &out);
+    if (out.x.ax == 0) {
+        printf("Mouse not detected!\n");
+        exit(1);
+    }
+    in.x.ax = 1; // Show mouse cursor
+    int86(0x33, &in, &out);
+}
+
+void get_mouse_pos(int *button, int *x, int *y) {
+    union REGS in, out;
+    in.x.ax = 3; // Get mouse position and button status
+    int86(0x33, &in, &out);
+    *button = out.x.bx; // Button status
+    *x = out.x.cx;      // X coordinate
+    *y = out.x.dx;      // Y coordinate
+}
+
+// Function to draw a circle with pencil effect
+void draw_circle_pencil(int xc, int yc, int radius) {
+    float angle;
+    int x, y;
+    setcolor(YELLOW); // Pencil color
+    for (angle = 0; angle <= 360; angle += 5) { // Increment by 5 for faster drawing
+        x = xc + radius * cos(angle * M_PI / 180);
+        y = yc + radius * sin(angle * M_PI / 180);
+        putpixel(x, y, YELLOW); // Draw pixel
+        delay(2); // Reduced delay for smoother animation
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    int x, y, button, prev_x = -1, prev_y = -1;
+    char ch;
+
+    // Initialize graphics
+    initgraph(&gd, &gm, "C:\\TC\\BGI");
+    if (graphresult() != grOk) {
+        printf("Graphics initialization failed!\n");
+        return 1;
+    }
+
+    // Initialize mouse
+    init_mouse();
+
+    // Instructions
+    setcolor(WHITE);
+    outtextxy(10, 10, "Move mouse to draw circles. Press ESC to exit.");
+
+    while (1) {
+        // Get mouse status
+        get_mouse_pos(&button, &x, &y);
+
+        // Draw circle only if mouse has moved significantly
+        if (abs(x - prev_x) > 10 || abs(y - prev_y) > 10) {
+            draw_circle_pencil(x, y, 30); // Draw circle with radius 30
+            prev_x = x;
+            prev_y = y;
+        }
+
+        // Check for ESC key to exit
+        if (kbhit()) {
+            ch = getch();
+            if (ch == 27) // ESC key
+                break;
+        }
+    }
+
+    // Clean up
+    closegraph();
+    return 0;
+}
