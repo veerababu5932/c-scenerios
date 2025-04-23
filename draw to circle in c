@@ -1,0 +1,90 @@
+#include <windows.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+void LeftClick() {
+    INPUT input = {0};
+    input.type = INPUT_MOUSE;
+    input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+    SendInput(1, &input, sizeof(INPUT));
+
+    ZeroMemory(&input, sizeof(INPUT));
+    input.type = INPUT_MOUSE;
+    input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+    SendInput(1, &input, sizeof(INPUT));
+    Sleep(100);
+}
+
+void selectPencilTool() {
+    int pencilX = 50;
+    int pencilY = 80;
+    SetCursorPos(pencilX, pencilY);
+    LeftClick();
+    Sleep(500);
+}
+
+void MoveWithLeftButtonDown(int x, int y) {
+    SetCursorPos(x, y);
+    INPUT input = {0};
+    input.type = INPUT_MOUSE;
+    input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
+    input.mi.dx = x * (65535.0f / GetSystemMetrics(SM_CXSCREEN));
+    input.mi.dy = y * (65535.0f / GetSystemMetrics(SM_CYSCREEN));
+    SendInput(1, &input, sizeof(INPUT));
+    Sleep(1);
+}
+
+void drawCircle(int centerX, int centerY, int radius) {
+    double angle;
+    int x, y;
+    
+    // Move to starting position
+    SetCursorPos(centerX + radius, centerY);
+    Sleep(100);
+
+    // Hold left mouse button
+    INPUT input = {0};
+    input.type = INPUT_MOUSE;
+    input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+    SendInput(1, &input, sizeof(INPUT));
+    Sleep(50);
+
+    // Draw circle
+    for (angle = 0; angle <= 2 * M_PI; angle += 0.01) {
+        x = centerX + radius * cos(angle);
+        y = centerY + radius * sin(angle);
+        MoveWithLeftButtonDown(x, y);
+    }
+
+    // Release mouse button
+    ZeroMemory(&input, sizeof(INPUT));
+    input.type = INPUT_MOUSE;
+    input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+    SendInput(1, &input, sizeof(INPUT));
+}
+
+void drawConcentricCircles(int centerX, int centerY, int maxRadius, int step) {
+    for (int radius = 10; radius <= maxRadius; radius += step) {
+        drawCircle(centerX, centerY, radius);
+        Sleep(500); // Pause between circles
+    }
+}
+
+int main() {
+    system("start mspaint");
+    Sleep(3000);
+
+    HWND hwnd = FindWindowA(NULL, "Untitled - Paint");
+    if (hwnd) {
+        ShowWindow(hwnd, SW_MAXIMIZE);
+        Sleep(1000);
+    }
+
+    selectPencilTool();
+    
+    // Draw 5 concentric circles with radius increasing by 30 pixels each time
+    drawConcentricCircles(500, 400, 150, 30);
+
+    return 0;
+}
