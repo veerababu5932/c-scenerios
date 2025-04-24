@@ -1,0 +1,9 @@
+#include <windows.h>
+#include <stdio.h>
+
+int main() {
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+    printf("Screen Resolution: %dx%d\n", screenWidth, screenHeight);
+    return 0;
+}
