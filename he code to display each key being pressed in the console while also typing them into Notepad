@@ -1,0 +1,129 @@
+#include <windows.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
+// Function to simulate key press with shift support and display the key
+void PressKey(char key, BOOL shiftNeeded) {
+    INPUT inputs[4] = {0};
+    int inputCount = 0;
+    
+    // Display the key being pressed
+    if (shiftNeeded) {
+        printf("[SHIFT+%c]\n", toupper(key));
+    } else {
+        printf("[%c]\n", tolower(key));
+    }
+    
+    // Press Shift if needed
+    if (shiftNeeded) {
+        inputs[inputCount].type = INPUT_KEYBOARD;
+        inputs[inputCount].ki.wVk = VK_SHIFT;
+        inputCount++;
+    }
+    
+    // Press the key
+    inputs[inputCount].type = INPUT_KEYBOARD;
+    inputs[inputCount].ki.wVk = VkKeyScanA(key) & 0xFF;
+    inputCount++;
+    
+    // Release the key
+    inputs[inputCount].type = INPUT_KEYBOARD;
+    inputs[inputCount].ki.wVk = VkKeyScanA(key) & 0xFF;
+    inputs[inputCount].ki.dwFlags = KEYEVENTF_KEYUP;
+    inputCount++;
+    
+    // Release Shift if used
+    if (shiftNeeded) {
+        inputs[inputCount].type = INPUT_KEYBOARD;
+        inputs[inputCount].ki.wVk = VK_SHIFT;
+        inputs[inputCount].ki.dwFlags = KEYEVENTF_KEYUP;
+        inputCount++;
+    }
+    
+    SendInput(inputCount, inputs, sizeof(INPUT));
+    Sleep(30); // Short delay between key presses
+}
+
+// Function to type a complete string and show progress
+void TypeString(const char* text) {
+    printf("Typing: %s\n", text);
+    printf("Key presses:\n");
+    int i;
+    for (i = 0; text[i] != '\0'; i++) {
+        // Determine if shift key is needed
+        BOOL shift = isupper(text[i]) || 
+                     strchr("!@#$%^&*()_+{}|:\"<>?", text[i]) != NULL;
+        
+        PressKey(tolower(text[i]), shift);
+        
+        // Longer delay after certain characters
+        if (text[i] == ' ' || text[i] == '.' || text[i] == ',' || text[i] == '\n') {
+            Sleep(50);
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    printf("Starting Notepad typing automation...\n");
+    
+    // Open Notepad
+    system("start notepad");
+    printf("Opening Notepad...\n");
+    Sleep(2000); // Wait for Notepad to open
+    
+    // Find Notepad window and bring to foreground
+    HWND hwnd = FindWindowA("Notepad", NULL);
+    if (hwnd) {
+        printf("Notepad window found, bringing to foreground...\n");
+        SetForegroundWindow(hwnd);
+        Sleep(500); // Wait for window to activate
+    } else {
+        printf("Error: Notepad window not found!\n");
+        return 1;
+    }
+    
+    printf("Beginning to type...\n\n");
+    
+    // Type some content
+    TypeString("This text is being typed automatically in Notepad!\n\n");
+    TypeString("Current Date: ");
+    
+    // Get and type current date (Windows specific)
+    SYSTEMTIME st;
+    GetLocalTime(&st);
+    char dateStr[50];
+    sprintf(dateStr, "%02d/%02d/%04d\n", st.wDay, st.wMonth, st.wYear);
+    TypeString(dateStr);
+    
+    TypeString("\nThis C program is simulating keyboard input.\n");
+    TypeString("It can type any text you want to automate!\n");
+    
+    printf("\nTyping complete! Check Notepad for the result.\n");
+    
+    return 0;
+}
+
+
+
+
+Starting Notepad typing automation...
+Opening Notepad...
+Notepad window found, bringing to foreground...
+Beginning to type...
+
+Typing: This text is being typed automatically in Notepad!
+
+Key presses:
+[SHIFT+t]
+[h]
+[i]
+[s]
+[ ]
+[t]
+[e]
+[x]
+[t]
+...
