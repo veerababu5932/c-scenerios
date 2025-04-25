@@ -1,0 +1,27 @@
+Line-by-Line Explanation of the Chrome Automation Program
+Here's a detailed explanation of each part of the code that automates opening Chrome and navigating to a website:
+
+c
+-- #include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+#include directives: These include necessary header files
+
+stdio.h: Standard input/output functions
+
+stdlib.h: General utilities (used for system() function)
+
+windows.h: Windows API functions (for keybd_event and Sleep)
+
+
+    // Simulate typing "thub" and pressing Enter
+    // This uses Windows API to send keystrokes
+    keybd_event(VK_CONTROL, 0, 0, 0);          // Press Ctrl
+    keybd_event() simulates keyboard input
+
+VK_CONTROL is the virtual key code for the Ctrl key
+
+Parameters: (virtualKey, scanCode, flags, extraInfo)
+
+This line "presses" the Ctrl key down
+    keybd_event('L', 0, 0, 0);                 // Press L (focus address bar)
